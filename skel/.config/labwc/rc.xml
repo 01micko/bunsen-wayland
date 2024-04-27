@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<labwc_config>
+  <theme>
+    <name>Boron-aqua</name>
+    <cornerRadius>6</cornerRadius>
+    <font>
+      <name>sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>normal</weight>
+    </font>
+  </theme>
+  <keyboard>
+    <default/>
+    <numlock>off</numlock>
+    <keybind key="A-F1">
+      <action name="ShowMenu">
+        <menu>root-menu</menu>
+      </action>
+    </keybind>
+    <keybind key="A-F2">
+      <action name="Execute">
+        <command>defaultrun</command>
+      </action>
+    </keybind>
+    <keybind key="W-l">
+      <action name="Execute">
+        <command>swaylock -F -f --indicator-idle-visible -i /usr/share/images/bunsen/wallpapers/default/default</command>
+      </action>
+    </keybind>
+    <keybind key="W-r">
+      <action name="Execute">
+        <command>defaultrun</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-t">
+      <action name="Execute">
+        <command>lxterminal</command>
+      </action>
+    </keybind>
+    <keybind key="Print">
+      <action name="Execute">
+        <command>grim</command>
+      </action>
+    </keybind>
+    <keybind key="A-Print">
+      <action name="Execute">
+        <command>bash -c "grim -g \"`slurp`\""</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-Delete">
+      <action name="Execute">
+        <command>top</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-Backspace">
+      <action name="Execute">
+        <command>bl-exit</command>
+      </action>
+    </keybind>
+    <keybind key="C-l">
+      <action name="GoToDesktop" to="left" wrap="yes"/>
+    </keybind>
+    <keybind key="C-r">
+      <action name="GoToDesktop" to="right" wrap="yes"/>
+    </keybind>
+    <keybind key="C-A-r">
+      <action name="SnapToRegion" region="right"/>
+    </keybind>
+    <keybind key="C-A-l">
+      <action name="SnapToRegion" region="left"/>
+    </keybind>
+    <keybind key="A-l">
+      <action name="SendToDesktop" to="left" wrap="yes"/>
+    </keybind>
+    <keybind key="A-r">
+      <action name="SendToDesktop" to="right" wrap="yes"/>
+    </keybind>
+  </keyboard>
+  <desktops number="4"/>
+  <!--<margin top="4" bottom="4" left="4" right="4" output="HDMI-A-1"/>
+    <desktops>
+    <popupTime>1000</popupTime>
+    <names>
+      <name>x 1</name>
+      <name>x 2</name>
+      <name>x 3</name>
+      <name>x 4</name>
+    </names>
+  </desktops>
+-->
+  <regions>
+    <region name="right" x="50%" y="0%" height="100%" width="50%"/>
+    <region name="left" x="0%" y="0%" height="100%" width="50%"/>
+  </regions>
+  <mouse>
+    <doubleClickTime>500</doubleClickTime>
+    <scrollFactor>2.0</scrollFactor>
+    <default/>
+    <context name="Root">
+      <mousebind button="Left" action="Press">
+        <action name="ShowMenu" menu="none"/>
+      </mousebind>
+      <mousebind button="Right" action="Press">
+        <action name="ShowMenu" menu="root-menu"/>
+      </mousebind>
+      <mousebind button="Middle" action="Press">
+        <action name="ShowMenu" menu="none"/>
+      </mousebind>
+      <mousebind direction="Up" action="Scroll">
+        <action name="GoToDesktop" to="left" wrap="yes"/>
+      </mousebind>
+      <mousebind direction="Down" action="Scroll">
+        <action name="GoToDesktop" to="right" wrap="yes"/>
+      </mousebind>
+    </context>
+    <context name="Title">
+      <mousebind button="A-Left" action="Click">
+        <action name="SnapToRegion" region="left"/>
+      </mousebind>
+      <mousebind button="A-Right" action="Click">
+        <action name="SnapToRegion" region="right"/>
+      </mousebind>
+    </context>
+  </mouse>
+  <resize popupShow="Always"/>
+  <libinput>
+    <device category="default">
+      <naturalScroll>no</naturalScroll>
+      <leftHanded/>
+      <pointerSpeed/>
+      <accelProfile/>
+      <tap>yes</tap>
+      <tapButtonMap/>
+      <middleEmulation/>
+      <disableWhileTyping/>
+    </device>
+  </libinput>
+</labwc_config>
