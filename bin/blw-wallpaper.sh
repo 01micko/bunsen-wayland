@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
+
 # set the image
 set_wall() {
     echo setting $1
-    # write to config for labwc/autostart (swaybg) and swaylock
+    # write to config for labwc/autostart (swaybg and swaylock)
     echo "WALL=$1" > $HOME/.config/wall.conf
     # set if now
     swaybg -i "$1" -m stretch &

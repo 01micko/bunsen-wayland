@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
 # set theme
 change_cursor_theme() {
     theme=$1

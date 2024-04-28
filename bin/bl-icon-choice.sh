@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
 # set theme
 change_icon_theme() {
     theme="$1"
