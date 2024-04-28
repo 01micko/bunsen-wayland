@@ -1,0 +1,5 @@
+bunsen-wayland (12.0-1) boron; urgency=medium
+
+  * Add .desktop file for auto-generated menus.
+
+ -- Mick Amadio <01micko@gmail.com>  Sun, 28 Apr 2024 20:28:30 +1000

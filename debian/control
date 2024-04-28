@@ -1,0 +1,21 @@
+Source: bunsen-wayland
+Section: misc
+Priority: optional
+Maintainer: Mick Amadio <01micko@gmail,com>
+Build-Depends: debhelper-compat (= 13), help2man
+Rules-Requires-Root: no
+Standards-Version: 4.6.1.0
+Homepage: https://github.com/01micko/bunsen-wayland
+Vcs-Git: https://github.com/01micko/bunsen-wayland.git
+Vcs-Browser: https://github.com/01micko/bunsen-wayland
+
+Package: bunsen-wayland
+Architecture: all
+Depends: ${misc:Depends}, wlogout, swaybg, swayidle, swaylock
+Recommends: yad
+Replaces: bunsen-exit (<<9.2-1)
+Breaks: bunsen-exit (<<9.2-1)
+Conflicts: bunsen-exit, bunsen-lock
+Description: Bunsen logout script.
+ GUI logout/suspend/reboot/poweroff script, with a GUI,
+ TTY menu and CLI options.

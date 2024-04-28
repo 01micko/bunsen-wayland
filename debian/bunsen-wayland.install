@@ -1,0 +1,3 @@
+bin/* usr/bin
+applications usr/share
+skel usr/share/bunsen

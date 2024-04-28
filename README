@@ -1,0 +1,5 @@
+# bunsen-wayland
+Various wayland related scripts and configs for bunsenlabs
+
+Includes wrappers for wlogout, swaylock and scripts to set wallpapers,
+icon, gtk and cursor themes.
