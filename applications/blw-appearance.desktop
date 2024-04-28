@@ -1,8 +1,9 @@
 [Desktop Entry]
-Type=Application
 Name=Bunsen Look And Feel
 GenericName=Bunsen Look And Feel
 Comment=Customizes look and feel of desktop and applications
+Type=Application
 Keywords=windows;preferences;settings;theme;style;appearance;
+Exec=blw-bunsen-appearance.sh
 Icon=preferences-desktop-theme
-Categories=GTK;Settings;DesktopSettings;
+Categories=Settings;DesktopSettings;
