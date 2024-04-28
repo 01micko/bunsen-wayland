@@ -176,7 +176,7 @@ case "$1" in
     -k|--lock)
         if on_graphical_session
         then
-            blw-swaylock.sh
+            bl-wlogout
         else
             echo "$0: $lock_tty_msg" >&2
             exit 1
