@@ -7,6 +7,19 @@ change_icon_theme() {
     theme=${theme/_/ }
     theme=${theme/_/ } # twice if 2 spaces
     echo "$theme"
+    curtheme=$(gsettings get org.gnome.desktop.interface icon-theme)
+    if [[ "$theme" == "$(echo $curtheme|tr -d "'")" ]];then
+        yad --title="Icons" --window-icon=dialog-warning --name=dialog-warning \
+            --image=dialog-warning --button="Ok!gtk-ok!" text="Themes are the same!"
+        exit
+    fi
+    yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
+                --image=dialog-question \
+                --text="Do you want to change themes from $curtheme to $theme?"
+    case $? in
+        0);;
+        *)exit;;
+    esac
     gsettings set org.gnome.desktop.interface icon-theme "$theme"
     [[ -f "$HOME/.gtkrc-2.0" ]] && \
       sed -i "s/gtk-icon-theme-name =.*$/gtk-icon-theme-name = \"$theme\"/" $HOME/.gtkrc-2.0

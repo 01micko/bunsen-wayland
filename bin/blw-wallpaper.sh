@@ -5,7 +5,26 @@
 # set the image
 set_wall() {
     echo setting $1
-    # write to config for labwc/autostart (swaybg and swaylock)
+    WALL=''
+    if [[ -f "$HOME/.config/wall.conf" ]];then
+        . $HOME/.config/wall.conf
+		OLDWALL=$WALL
+	fi
+	wall=${1##*/}
+    oldwall=${WALL##*/}
+    if [[ "$wall" == "$oldwall" ]];then
+        yad --title="Icons" --window-icon=dialog-warning --name=dialog-warning \
+            --image=dialog-warning --button="Ok!gtk-ok!" text="Wallpapers are the same!"
+        exit
+    fi
+    yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
+                --image=dialog-question \
+                --text="Do you want to change wallpapers from $oldwall to $wall?"
+    case $? in
+        0);;
+        *)exit;;
+    esac
+     # write to config for labwc/autostart (swaybg and swaylock)
     echo "WALL=$1" > $HOME/.config/wall.conf
     # set if now
     swaybg -i "$1" -m stretch &

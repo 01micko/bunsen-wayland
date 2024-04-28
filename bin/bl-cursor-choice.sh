@@ -6,7 +6,20 @@ change_cursor_theme() {
     theme=$1
     theme=${theme/_/ }
     echo "$theme"
-    gsettings set org.gnome.desktop.interface cursor-theme "$theme"
+    curtheme=$(gsettings get org.gnome.desktop.interface cursor-theme)
+    if [[ "$theme" == "$(echo $curtheme|tr -d "'")" ]];then
+        yad --title="Cursors" --window-icon=dialog-warning --name=dialog-warning \
+            --image=dialog-warning --button="Ok!gtk-ok!" text="Themes are the same!"
+        exit
+    fi
+    yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
+                --image=dialog-question \
+                --text="Do you want to change themes from $curtheme to $theme?"
+    case $? in
+        0);;
+        *)exit;;
+    esac
+     gsettings set org.gnome.desktop.interface cursor-theme "$theme"
     # set for labwc; others later, sway, hyprland etc
 	if grep -q 'XCURSOR_THEME' $HOME/.config/labwc/environment;then
         sed -i "s/XCURSOR_THEME.*$/XCURSOR_THEME=$theme/" $HOME/.config/labwc/environment
