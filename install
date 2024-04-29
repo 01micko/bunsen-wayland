@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# a hack install script for bunsen-netinstall
+# part of 'bunsen-wayland'
+# (c) Copyright: 2024 Mick Amadio <01micko@gmail.com>
+# gplv3 licence
+# conflicts with lxappearance, bl-exit
+
+# DOTdesktops
+echo "copying application .desktop files."
+sudo cp -a applications/* /usr/share/applications/ || exit 1
+
+# scripts
+echo "copying scripts."
+sudo cp -a bin/* /usr/bin/ || exit 1
+
+# configs
+echo "copying scripts."
+sudo cp -arf skel/.config/* /usr/share/bunsen/skel/.config/ || exit 1
+
+echo "Done!" && exit 0
+
+
+

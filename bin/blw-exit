@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-#    blw-exit: Bunsenlabs exit dialog, offering various exit options
-#     via both GUI and CLI
+#    blw-exit: Bunsenlabs exit dialog for wayland, offering various 
+#    exit options via both GUI and CLI
 #    Copyright: 2019 MXStuff.org <init.choice@mxstuff.org>
 #               2019 hhh <hsumen@bunsenlabs.org>
 #               2019 John Crawley <john@bunsenlabs.org>
@@ -47,7 +47,7 @@
 ########################################################################
 
 ### Usage ###
-USAGE="\nwbl-exit [OPTION]\n\n\
+USAGE="\nblw-exit [OPTION]\n\n\
 With no arguments default yad (GUI) or text menu at a TTY\n\n\
 Only one argument is read, they cannot be combined\n\
     -h --help\tShow this help\n\
