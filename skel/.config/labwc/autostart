@@ -4,10 +4,10 @@ if [ -f "$HOME/.config/wall.conf" ];then
     . $HOME/.config/wall.conf
     IMG=$WALL
 fi
-swaybg -i $IMG -m stretch
+swaybg -i $IMG -m stretch &
 
 # conky
-conky -c $HOME/.config/conky/BL-Boron-conky-wayland.conf
+conky -c $HOME/.config/conky/BL-Boron-conky-wayland.conf &
 
 # bar
 sfwbar &
@@ -17,4 +17,4 @@ swayidle -w \
     timeout 300 "swaylock -f -i $IMG" \
     timeout 600 'wlopm --off *' \
     resume 'wlopm --on *' \
-    before-sleep "swaylock -f -i $IMG"
+    before-sleep "swaylock -f -i $IMG" &
