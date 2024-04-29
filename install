@@ -15,8 +15,12 @@ echo "copying scripts."
 sudo cp -a bin/* /usr/bin/ || exit 1
 
 # configs
-echo "copying scripts."
+echo "copying configs."
 sudo cp -arf skel/.config/* /usr/share/bunsen/skel/.config/ || exit 1
+
+# session
+echo "copying sessions."
+sudo cp -a wayland-sessions/* /usr/share/wayland-sessions/ || exit 1
 
 echo "Done!" && exit 0
 
