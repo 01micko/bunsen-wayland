@@ -3,7 +3,7 @@
 ## The script bl-user-setup copies them to the user $HOME directory on first login.
 ## See more info with command 'bl-user-setup --help'
 
-## BunsenLabs autostart-wl
+## BunsenLabs autostart
 ## ====================
 ## When you login to your BunsenLabs Wayland session, this autostart script
 ## will be executed to launch any applications

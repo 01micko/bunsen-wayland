@@ -1,21 +1,21 @@
 #!/bin/sh
 
 if test -n "$1"; then
-    echo "Syntax: bunsenlabs-wlsession"
+    echo "Syntax: bunsenlabs-wl-session"
     echo
-    echo "See the bunsenlabs-wlsession(1) manpage for help."
+    echo "See the bunsenlabs-wl-session(1) manpage for help."
   exit
 fi
 
 usr_confdir="${XDG_CONFIG_HOME:-$HOME/.config}"
-usr_autostart_wl="$usr_confdir/bunsen/autostart-wl"
+usr_autostart_wl="$usr_confdir/bunsen/autostart"
 usr_envfile="$usr_confdir/bunsen/environment"
 usr_setupflagfile="$usr_confdir/bunsen/bl-setup"
 usr_xsessionrc="$HOME/.xsessionrc"
 usr_resources="$HOME/.Xresources"
 
-default_autostart_wl='/usr/share/bunsen/skel/.config/bunsen/autostart-wl'
-bl_autostart_wl='/usr/lib/bunsen/configs/bunsen-autostart-wl'
+default_autostart_wl='/usr/share/bunsen/skel/.config/bunsen/autostart'
+bl_autostart_wl='/usr/lib/bunsen/configs/bunsen-autostart'
 
 # Clean up after GDM (GDM sets the number of desktops to one).
 xprop -root -remove _NET_NUMBER_OF_DESKTOPS \
@@ -43,14 +43,14 @@ fi
 # Set up the BL-specific environment.
 test -r "$usr_envfile" && . "$usr_envfile" || echo "$0: cannot source $usr_envfile" >&2
 
-# At least try to ensure user has an autostart-wl file.
+# At least try to ensure user has an autostart file.
 [ -e "$usr_autostart_wl" ] || {
     echo "$0: ERROR $usr_autostart_wl does not exist, copying in $default_autostart_wl" >&2
     cp "$default_autostart_wl" "$usr_autostart_wl"
 }
 
 # Check if user has set an alternative window manager.
-# This would be the first setting in ~/.config/bunsen/autostart-wl.
+# This would be the first setting in ~/.config/bunsen/autostart.
 win_man=labwc
 # just use first uncommented line of file, then break
 [ -r "$usr_autostart_wl" ] && {
@@ -73,7 +73,7 @@ hash "$win_man" 2>/dev/null || { echo "$0: Window manager command \"$win_man\" n
 # Run the window manager.
 case "$win_man" in
 labwc)
-    exec /usr/bin/labwc --config "$usr_confdir/labwc/rc.xml" --startup "$bl_autostart_wl"
+    exec /usr/bin/labwc --config "$usr_confdir/labwc/rc.xml" --startup "$usr_autostart_wl"
     ;;
 *)
     (
