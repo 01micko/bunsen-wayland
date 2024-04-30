@@ -1,0 +1,124 @@
+## Bunsenlabs User config files
+## All default BunsenLabs user config files are located in /usr/share/bunsen/skel.
+## The script bl-user-setup copies them to the user $HOME directory on first login.
+## See more info with command 'bl-user-setup --help'
+
+## BunsenLabs autostart-wl
+## ====================
+## When you login to your BunsenLabs Wayland session, this autostart script
+## will be executed to launch any applications
+## you want to run at startup.
+##
+## NB, like labwc's autostart script, this uses the default shell,
+## so "bashisms" are not supported.
+##
+## (Environment variables are set in ~/.config/bunsen/environment.)
+##
+## Note: some programs, such as 'nm-applet' are run via XDG autostart,
+## from .desktop files in /etc/xdg/autostart and ~/.config/autostart.
+## To disable this, comment out the last line in this file:
+## "bl-xdg-autostart"
+##
+## Run 'bl-xdg-autostart --list' to list any XDG autostarted programs.
+##
+## If you do something cool with your autostart script and you think others
+## could benefit from your hack, please consider sharing it at:
+## http://forums.bunsenlabs.org (registration required)
+##
+
+## COMPOSITOR
+## Do not edit the next line unless you have also installed any
+## necessary other programs for the different compositor,
+## and edited the compositor-dependent section later in this file.
+## Use the compositor's actual command, not name.
+## This should be the first uncommented line in this file:
+compositor=labwc
+
+# test if chosen compositor is actually running (you should probably not edit this line)
+pgrep -x -u "$USER" "$compositor" || { echo "$0: Compositor $compositor is not running." >&2 ; exit 1;}
+
+### SETTINGS START
+
+# To Do
+
+### TOUCHPAD: comment out the next two entries if you don't have one
+
+# To Do
+
+### TOUCHPAD END
+
+### SETTINGS END
+
+## GNOME PolicyKit authentication
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+
+#######################################################
+######## compositor-dependent applications ########
+# these will be things like panels, conky, wallpaper etc
+
+case "$compositor" in
+labwc)
+    ## The following applications will only be started in an labwc session.
+    ## Add a new clause for your compositor, if different.
+
+    ## Set a wallpaper
+    IMG=/usr/share/images/bunsen/wallpapers/default/default
+    if [ -f "$HOME/.config/bunsen/wall.conf" ];then
+        . $HOME/.config/bunsen/wall.conf
+        IMG=$WALL
+    fi
+    swaybg -i $IMG -m stretch &
+
+    ## Start the Conky session (the default conkyrc will run if no sessions have been set)
+    # bl-conky-session &
+    ## The "base" install has no bl-conky-session script, so start conky directly:
+    conky -c $HOME/.config/conky/BL-Boron-conky-wayland.conf &
+
+    ## Start sfwbar panel
+    ( sleep2; sfwbar ) &
+    
+    ## screen lock
+    swayidle -w \
+        timeout 300 "swaylock -f -i $IMG" \
+        timeout 600 'wlopm --off *' \
+        resume 'wlopm --on *' \
+        before-sleep "swaylock -f -i $IMG" &
+    ;;
+    # End of labwc application group.
+
+## Vague possibility for sway compositor
+#sway)
+
+#   conky -c $HOME/.config/conky/BL-Boron-conky-wayland.conf &
+#    ( sleep2; sfwbar ) &
+#   ;;
+
+esac
+
+####### end of compositor-dependent section #######
+#######################################################
+
+### Following entries apply to all compositor: ###
+
+## Start Thunar Daemon, if set as bl-file-manager
+if [ "$(readlink -f "$(which bl-file-manager)")" = "$(which thunar)" ]
+then
+    thunar --daemon &
+fi
+
+## bl-welcome - post-installation script, will not run in a live session
+## and only runs once. Safe to remove.
+## Not provided in base install.
+#(sleep 10; bl-welcome --firstrun) &
+
+## bl-fortune - have the system come up with a little adage
+## These quotes are from the #! and BL forums.
+## Many of them are from the 'Off Topic' subforums of those sites,
+## so they are likely to be abstract, out-of-context...
+## ... and possibly Not Safe For Work, children, or your mental health in general.
+## Uncomment the following line to enable this (adjust the sleep seconds to taste).
+#(sleep 20; bl-fortune) &
+
+## Run the XDG autostart stuff. This requires python3-xdg to be installed.
+## See 'bl-xdg-autostart --list' for list of autostarted applications.
+bl-xdg-autostart

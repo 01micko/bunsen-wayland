@@ -22,6 +22,10 @@ sudo cp -arf skel/.config/* /usr/share/bunsen/skel/.config/ || exit 1
 echo "copying sessions."
 sudo cp -a wayland-sessions/* /usr/share/wayland-sessions/ || exit 1
 
+# man page
+echo "copying man pages."
+sudo cp -a man/man1/* /usr/share/man/man1/ || exit 1
+
 echo "Done!" && exit 0
 
 

@@ -6,8 +6,8 @@
 set_wall() {
     echo setting $1
     WALL=''
-    if [[ -f "$HOME/.config/wall.conf" ]];then
-        . $HOME/.config/wall.conf
+    if [[ -f "$HOME/.config/bunsen/wall.conf" ]];then
+        . $HOME/.config/bunsen/wall.conf
 		OLDWALL=$WALL
 	fi
 	wall=${1##*/}
@@ -25,7 +25,7 @@ set_wall() {
         *)exit;;
     esac
      # write to config for labwc/autostart (swaybg and swaylock)
-    echo "WALL=$1" > $HOME/.config/wall.conf
+    echo "WALL=$1" > $HOME/.config/bunsen/wall.conf
     # set if now
     swaybg -i "$1" -m stretch &
 }

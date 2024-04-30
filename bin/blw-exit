@@ -68,9 +68,6 @@ It can be done with the vlock package installed, using the
 command 'vlock'. This script does not handle that case.
 If you have a graphical environment running the probable cause
 of seeing this message is that no display manager is installed.
-An alternative screen locker can be set in
-$HOME/.config/bunsen/bl-lock with the following line:
-LOCK_SCREEN_COMMAND=\"what-locks-screen --options\"
 "
 
 # Some screen locking software does not listen for logind calls,

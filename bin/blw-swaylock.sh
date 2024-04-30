@@ -10,7 +10,7 @@ yad_err() {
 }
 
 type swaylock >/dev/null 2>&1 || {
-	echo "error: swaylock is not installed"
+	yad_err "error: swaylock is not installed"
 	exit 
 }
 
@@ -25,8 +25,8 @@ on_graphical_session(){
 }
 
 IMG=/usr/share/images/bunsen/wallpapers/default/default
-if [ -f "$HOME/.config/wall.conf" ];then
-    . $HOME/.config/wall.conf
+if [ -f "$HOME/.config/bunsen/wall.conf" ];then
+    . $HOME/.config/bunsen/wall.conf
     IMG=$WALL
 fi
 
