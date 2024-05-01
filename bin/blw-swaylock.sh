@@ -11,8 +11,8 @@ yad_err() {
 
 on_graphical_session(){
     if [[ -n $DISPLAY || -n $WAYLAND_DISPLAY ]];then
-        case $XDG_CURRENT_DESKTOP in
-            wlroots|sway|labwc|hyprland|wayfire|river)return 0 ;; # add more?
+        case $WAYLAND_DISPLAY in
+            wayland*)return 0 ;;
             *)yad_err "Swaylock does not work in X";; # $XDG_CURRENT_DESKTOP won't be set in TUI
         esac
     fi
