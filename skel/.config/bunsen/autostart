@@ -5,11 +5,11 @@
 
 ## BunsenLabs autostart
 ## ====================
-## When you login to your BunsenLabs Wayland session, this autostart script
+## When you login to your BunsenLabs session, this autostart script
 ## will be executed to launch any applications
 ## you want to run at startup.
 ##
-## NB, like labwc's autostart script, this uses the default shell,
+## NB, like openbox's autostart script, this uses the default shell,
 ## so "bashisms" are not supported.
 ##
 ## (Environment variables are set in ~/.config/bunsen/environment.)
@@ -26,24 +26,49 @@
 ## http://forums.bunsenlabs.org (registration required)
 ##
 
-## COMPOSITOR
+## WINDOW MANAGER
 ## Do not edit the next line unless you have also installed any
-## necessary other programs for the different compositor,
-## and edited the compositor-dependent section later in this file.
-## Use the compositor's actual command, not name.
+## necessary other programs for the different window manager,
+## and edited the window-manager-dependent section later in this file.
+## Use the window manager's actual command, not name.
 ## This should be the first uncommented line in this file:
-compositor=labwc
+window_manager=labwc
 
-# test if chosen compositor is actually running (you should probably not edit this line)
-pgrep -x -u "$USER" "$compositor" || { echo "$0: Compositor $compositor is not running." >&2 ; exit 1;}
+# test if chosen window manager is actually running (you should probably not edit this line)
+pgrep -x -u "$USER" "$window_manager" || { echo "$0: Window manager $window_manager is not running." >&2 ; exit 1;}
 
 ### SETTINGS START
 
-# To Do
+# start keybinds daemon
+# (If this clashes with some window manager's keybinds,
+# you can move it to the window-manager-dependent section below.)
+xbindkeys_autostart 2>&1 >/dev/null
+
+## Turn on/off system beep.
+xset b off 2>&1 >/dev/null
+
+## Set keyboard settings - 250 ms delay and 25 cps (characters per second) repeat rate.
+## Adjust the values according to your preferances.
+xset r rate 250 25 2>&1 >/dev/null
+
+## Add keyboard mapping.
+#xmodmap -e "keysym Insert = Multi_key"
+
+## Disable CapsLock
+#setxkbmap -option ctrl:nocaps
+# alternative: use as compose key
+#setxkbmap -option compose:caps
 
 ### TOUCHPAD: comment out the next two entries if you don't have one
 
-# To Do
+## Configure touchpad. See 'man synaptics' for more info.
+## (Now might be using libinput instead of synaptics.)
+synclient VertEdgeScroll=1 HorizEdgeScroll=1 VertTwoFingerScroll=1 TapButton1=1 2>&1 >/dev/null
+## alternative:
+#synclient VertEdgeScroll=0 VertTwoFingerScroll=0 HorizEdgeScroll=0 TapButton1=1 TapButton2=3 TapButton3=2 PalmDetect=1 PalmMinWidth=4 PalmMinZ=100
+
+## Disable touchpad while typing
+syndaemon -i .5 -K -t -R -d 2>&1 >/dev/null &
 
 ### TOUCHPAD END
 
@@ -53,10 +78,42 @@ pgrep -x -u "$USER" "$compositor" || { echo "$0: Compositor $compositor is not r
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
 #######################################################
-######## compositor-dependent applications ########
+######## window-manager-dependent applications ########
 # these will be things like panels, conky, wallpaper etc
 
-case "$compositor" in
+case "$window_manager" in
+openbox)
+    ## The following applications will only be started in an openbox session.
+    ## Add a new clause for your window manager, if different.
+
+    ## Alias Super key to Super+Space for single-key menu.
+    ## See 'man xcape' for other possibilities.
+    xcape -e 'Super_L=Super_L|space'
+
+    ## Set a wallpaper
+    nitrogen --restore
+
+    ## Composition
+    ## NOTE: composition must be started before tint2
+    # disabled for lite system
+    #bl-compositor --start
+
+    ## Start the Conky session (the default conkyrc will run if no sessions have been set)
+    # bl-conky-session &
+    ## The "base" install has no bl-conky-session script, so start conky directly:
+    conky -c ~/.config/conky/BL-Default-conky.conf &
+
+    ## Start the tint2 session (the default tint2 will run if no sessions have been set)
+    # ( sleep 2; bl-tint2-session ) &
+    ## The "base" install has no bl-tint2-session script, so start tint2 directly:
+    ( sleep2; tint2 -c ~/.config/tint2/tint2rc ) &
+
+    ## Install bunsen-utilities and bunsen-pipemenus
+    ## to get all the conky and tint2 management utilities.
+
+    ;;
+    # End of openbox application group.
+
 labwc)
     ## The following applications will only be started in an labwc session.
     ## Add a new clause for your compositor, if different.
@@ -75,7 +132,7 @@ labwc)
     conky -c $HOME/.config/conky/BL-Boron-conky-wayland.conf &
 
     ## Start sfwbar panel
-    ( sleep2; sfwbar ) &
+    ( sleep 2; sfwbar ) &
     
     ## screen lock
     swayidle -w \
@@ -93,17 +150,38 @@ labwc)
 #    ( sleep2; sfwbar ) &
 #   ;;
 
+## Vague possibility for XFCE window manager
+#xfwm4)
+#   xcape -e 'Super_L=Super_L|space'
+#   (sleep 3; xfdesktop) &
+#   bl-tint2-session &
+#   bl-conky-session &
+#   ;;
+
+## Vague possibility for Awesome window manager
+#awesome)
+#    bl-compositor --start
+#    xfce4-panel &
+#    bl-conky-session &
+#    ;;
+
 esac
 
-####### end of compositor-dependent section #######
+####### end of window-manager-dependent section #######
 #######################################################
 
-### Following entries apply to all compositor: ###
+### Following entries apply to all window managers: ###
+
+## Volume control for systray
+#pnmixer &
+
+## Start Clipboard manager
+xfce4-clipman 2>&1 >/dev/null &
 
 ## Start Thunar Daemon, if set as bl-file-manager
 if [ "$(readlink -f "$(which bl-file-manager)")" = "$(which thunar)" ]
 then
-    thunar --daemon &
+    thunar --daemon 2>&1 >/dev/null &
 fi
 
 ## bl-welcome - post-installation script, will not run in a live session
@@ -121,4 +199,4 @@ fi
 
 ## Run the XDG autostart stuff. This requires python3-xdg to be installed.
 ## See 'bl-xdg-autostart --list' for list of autostarted applications.
-bl-xdg-autostart
+bl-xdg-autostart 2>&1 >/dev/null

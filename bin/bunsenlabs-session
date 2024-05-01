@@ -1,21 +1,21 @@
 #!/bin/sh
 
 if test -n "$1"; then
-    echo "Syntax: bunsenlabs-wl-session"
+    echo "Syntax: bunsenlabs-session"
     echo
-    echo "See the bunsenlabs-wl-session(1) manpage for help."
+    echo "See the bunsenlabs-session(1) manpage for help."
   exit
 fi
 
 usr_confdir="${XDG_CONFIG_HOME:-$HOME/.config}"
-usr_autostart_wl="$usr_confdir/bunsen/autostart"
+usr_autostart="$usr_confdir/bunsen/autostart"
 usr_envfile="$usr_confdir/bunsen/environment"
 usr_setupflagfile="$usr_confdir/bunsen/bl-setup"
 usr_xsessionrc="$HOME/.xsessionrc"
 usr_resources="$HOME/.Xresources"
 
-default_autostart_wl='/usr/share/bunsen/skel/.config/bunsen/autostart'
-bl_autostart_wl='/usr/lib/bunsen/configs/bunsen-autostart'
+default_autostart='/usr/share/bunsen/skel/.config/bunsen/autostart'
+bl_autostart='/usr/lib/bunsen/configs/bunsen-autostart'
 
 # Clean up after GDM (GDM sets the number of desktops to one).
 xprop -root -remove _NET_NUMBER_OF_DESKTOPS \
@@ -31,10 +31,20 @@ then
         /usr/lib/bunsen/configs/bl-user-setup --install || true
     fi
 
-    # On first boot, user config files were not yet imported at that point.
+    # Actions here are usually handled by scripts in /etc/X11/Xsession.d/
+    # but on first boot, user config files were not yet imported at that point.
     # This makes a difference to the live session, unless user logs out/in.
 
+    # Merge ~/.Xresources
+    # (usually done by /etc/X11/Xsession.d/30x11-common_xresources)
+    test -r "$usr_resources" && xrdb -merge "$usr_resources" || echo "$0: cannot merge $usr_resources" >&2
+
+    # Set up the user environment for X sessions.
+    # (usually sourced by /etc/X11/Xsession.d/40x11-common_xsessionrc)
+    test -r "$usr_xsessionrc" && . "$usr_xsessionrc" || echo "$0: cannot source $usr_xsessionrc" >&2
+
     # Set up user directories
+    # (usually run by /etc/X11/Xsession.d/60xdg-user-dirs-update)
     if [ -x /usr/bin/xdg-user-dirs-update ]; then
         /usr/bin/xdg-user-dirs-update
     fi
@@ -44,36 +54,39 @@ fi
 test -r "$usr_envfile" && . "$usr_envfile" || echo "$0: cannot source $usr_envfile" >&2
 
 # At least try to ensure user has an autostart file.
-[ -e "$usr_autostart_wl" ] || {
-    echo "$0: ERROR $usr_autostart_wl does not exist, copying in $default_autostart_wl" >&2
-    cp "$default_autostart_wl" "$usr_autostart_wl"
+[ -e "$usr_autostart" ] || {
+    echo "$0: ERROR $usr_autostart does not exist, copying in $default_autostart" >&2
+    cp "$default_autostart" "$usr_autostart"
 }
 
 # Check if user has set an alternative window manager.
 # This would be the first setting in ~/.config/bunsen/autostart.
-win_man=labwc
+win_man=openbox
 # just use first uncommented line of file, then break
-[ -r "$usr_autostart_wl" ] && {
+[ -r "$usr_autostart" ] && {
     while read -r first rest
     do
         case "$first" in
         \#*|'')
             continue
             ;;
-        compositor=*)
-            win_man="${first#compositor=}"
+        window_manager=*)
+            win_man="${first#window_manager=}"
             ;;
         esac
         break
-    done < "$usr_autostart_wl"
+    done < "$usr_autostart"
 }
 
 hash "$win_man" 2>/dev/null || { echo "$0: Window manager command \"$win_man\" not found" >&2; exit 1;}
 
 # Run the window manager.
 case "$win_man" in
+openbox)
+    exec /usr/bin/openbox --config-file "$usr_confdir/openbox/bl-rc.xml" --startup "$bl_autostart"
+    ;;
 labwc)
-    exec /usr/bin/labwc --config "$usr_confdir/labwc/rc.xml" --startup "$usr_autostart_wl"
+    exec /usr/bin/labwc --config "$usr_confdir/labwc/rc.xml" --startup "$bl_autostart"
     ;;
 *)
     (
@@ -81,7 +94,7 @@ labwc)
     do
         sleep 0.5s
     done
-    "$bl_autostart_wl"
+    "$bl_autostart"
     ) &
     exec "$win_man"
     ;;

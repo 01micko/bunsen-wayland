@@ -9,11 +9,6 @@ yad_err() {
 	exit 1
 }
 
-type swaylock >/dev/null 2>&1 || {
-	yad_err "error: swaylock is not installed"
-	exit 
-}
-
 on_graphical_session(){
     if [[ -n $DISPLAY || -n $WAYLAND_DISPLAY ]];then
         case $XDG_CURRENT_DESKTOP in
@@ -22,6 +17,11 @@ on_graphical_session(){
         esac
     fi
     exit 1
+}
+
+type swaylock >/dev/null 2>&1 || {
+	yad_err "error: swaylock is not installed"
+	exit 
 }
 
 IMG=/usr/share/images/bunsen/wallpapers/default/default

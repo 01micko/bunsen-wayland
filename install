@@ -25,16 +25,7 @@ echo "copying sessions."
 sudo chown root:root wayland-sessions/* || exit 1
 sudo cp -a wayland-sessions/* /usr/share/wayland-sessions/ || exit 1
 
-# man page
-echo "copying man pages."
-sudo chown root:root man/* || exit 1
-sudo cp -a man/man1/* /usr/share/man/man1/ || exit 1
-
-# man page
-echo "copying default autostart."
-sudo cp -a lib/* /usr/lib/bunsen/configs/bunsen-autostart || exit 1
-
-echo "Done!" && exit 0
+echo "Done!" && sleep 2 && exit 0
 
 
 

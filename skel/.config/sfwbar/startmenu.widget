@@ -1,5 +1,5 @@
 Function("StartMenu") {
-  PipeRead "python << END
+  PipeRead "python3 << END
 import string, sys, fileinput, getopt, os, glob
 
 def main():
