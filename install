@@ -24,6 +24,10 @@ sudo cp -arf skel/.config/* /usr/share/bunsen/skel/.config/ || exit 1
 echo "copying sessions."
 sudo chown root:root wayland-sessions/* || exit 1
 sudo cp -a wayland-sessions/* /usr/share/wayland-sessions/ || exit 1
+if [ ! -x /usr/bin/openbox ] ; then
+    echo "removing xsession"
+    sudo rm -f /usr/share/xsessions/bunsenlabs.desktop || exit 1
+fi
 
 echo "Done!" && sleep 2 && exit 0
 

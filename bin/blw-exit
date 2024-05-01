@@ -139,9 +139,9 @@ on_terminal(){
 
 on_graphical_session(){
     if [[ -n $DISPLAY || -n $WAYLAND_DISPLAY ]];then
-        case $XDG_CURRENT_DESKTOP in
-            wlroots|sway|labwc|hyprland|wayfire|river)return 0 ;; # add more?
-            *)exit 1;; # $XDG_CURRENT_DESKTOP won't be set in TUI
+        case $WAYLAND_DISPLAY in
+            wayland*)return 0 ;;
+            *)exit 1;;
         esac
     fi
     return 1
