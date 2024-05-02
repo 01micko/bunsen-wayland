@@ -40,11 +40,11 @@ echo "setting themes to bunsen defaults"
 themefile=/usr/share/bunsen/skel/.config/gtk-3.0/settings.ini
 [ -z "$themefile" ] || exit 1
 gtktheme="$(grep 'gtk-theme-name' $themefile)"
-g="${gtktheme/gtk-theme-name = /}"
+g="${gtktheme/gtk-theme-name=/}"
 icotheme="$(grep 'icon-theme-name' $themefile)"
-i="${icotheme/gtk-icon-theme-name = /}"
+i="${icotheme/gtk-icon-theme-name=/}"
 curtheme"=$(grep 'cursor-theme-name' $themefile)"
-c="${curtheme/gtk-cursor-theme-name = /}"
+c="${curtheme/gtk-cursor-theme-name=/}"
 echo "gtk: $g ; ico: $i ; cur: $c"
 #gsettings get org.gnome.desktop.interface cursor-theme
 n=0
