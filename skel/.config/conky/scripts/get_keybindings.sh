@@ -76,7 +76,7 @@ do
             *terminal*)comm="Open Terminal";;
             *slurp*)comm="Screenshot(region)";;
             *grim*)comm="Screenshot";;
-            *processmanager*)comm="Process Manager";;
+            *lxtask*|*term*top*)comm="Process Manager";; # covers many terminals top|htop
             *exit*|*logout*)comm="Log out";;
         esac
         echo $comm

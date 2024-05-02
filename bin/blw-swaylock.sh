@@ -4,7 +4,7 @@
 # (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
 
 yad_err() {
-	yad --widow-icon=dialog-error --name=dialog-error --image=dialog-error \
+	yad --window-icon=dialog-error --name=dialog-error --image=dialog-error \
 	  --title Error --text "$1"
 	exit 1
 }
@@ -30,4 +30,4 @@ if [ -f "$HOME/.config/bunsen/wall.conf" ];then
     IMG=$WALL
 fi
 
-on_graphical_session && swaylock -f -i $IMG
+on_graphical_session && swaylock -F -f -i $IMG

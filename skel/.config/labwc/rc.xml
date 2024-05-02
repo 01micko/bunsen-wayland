@@ -20,12 +20,12 @@
     </keybind>
     <keybind key="A-F2">
       <action name="Execute">
-        <command>defaultrun</command>
+        <command>tofi-drun</command>
       </action>
     </keybind>
     <keybind key="W-l">
       <action name="Execute">
-        <command>swaylock -F -f --indicator-idle-visible -i /usr/share/images/bunsen/wallpapers/default/default</command>
+        <command>bl-wlogout</command>
       </action>
     </keybind>
     <keybind key="W-r">
@@ -50,12 +50,12 @@
     </keybind>
     <keybind key="C-A-Delete">
       <action name="Execute">
-        <command>top</command>
+        <command>lxterminal -e "top"</command>
       </action>
     </keybind>
     <keybind key="C-A-Backspace">
       <action name="Execute">
-        <command>bl-exit</command>
+        <command>blw-exit</command>
       </action>
     </keybind>
     <keybind key="C-l">

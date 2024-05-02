@@ -29,7 +29,30 @@ if [ ! -x /usr/bin/openbox ] ; then
     sudo rm -f /usr/share/xsessions/bunsenlabs.desktop || exit 1
 fi
 
+# themes fixup hack, from defaults in skell
+echo "setting themes to bunsen defaults"
+themefile=/usr/share/bunsen/skel/.config/gtk-3.0/settings.ini
+[ -z "$themefile" ] || exit 1
+gtktheme="$(grep 'gtk-theme-name' $themefile)"
+g="${gtktheme/gtk-theme-name = /}"
+icotheme="$(grep 'icon-theme-name' $themefile)"
+i="${icotheme/gtk-icon-theme-name = /}"
+curtheme"=$(grep 'cursor-theme-name' $themefile)"
+c="${curtheme/gtk-cursor-theme-name = /}"
+#gsettings get org.gnome.desktop.interface cursor-theme
+n=0
+( cd ~
+for t in gtk-theme icon-theme cursor-theme
+     case $n in
+         0)theme="$g"
+         1)theme="$i"
+         2)theme="$c"
+     esac
+     gsettings set org.gnome.desktop.interface $i "$theme" || exit 1
+     n=$((n + 1))
+done
+)
+  
 echo "Done!" && sleep 2 && exit 0
-
 
 

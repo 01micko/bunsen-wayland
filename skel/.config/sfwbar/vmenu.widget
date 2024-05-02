@@ -95,7 +95,7 @@ END"
 
 layout {
   image {
-    value = "open-menu"
+    value = "distributor-logo-bunsenlabs"
     style = "startmenu"
     action = Function "StartMenu"
     tooltip = "Application menu"

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Run Program
+Comment=Run any desktop program you have installed
+Exec=tofi-drun
+Icon=open-menu
+Type=Application
+Categories=System
+StartupNotify=false
+Terminal=false
