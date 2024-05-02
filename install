@@ -48,6 +48,7 @@ for t in gtk-theme icon-theme cursor-theme
          1)theme="$i"
          2)theme="$c"
      esac
+     echo setting "$t : $theme"
      gsettings set org.gnome.desktop.interface $t "$theme" || exit 1
      n=$((n + 1))
 done
