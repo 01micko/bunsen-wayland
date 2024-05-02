@@ -38,7 +38,7 @@ echo "netsurf icon fixup hack"
 # themes fixup hack, from defaults in skell
 echo "setting themes to bunsen defaults"
 themefile=/usr/share/bunsen/skel/.config/gtk-3.0/settings.ini
-[ -z "$themefile" ] || exit 1
+[ -z "$themefile" ] && exit 1
 gtktheme="$(grep 'gtk-theme-name' $themefile)"
 g="${gtktheme/gtk-theme-name=/}"
 icotheme="$(grep 'icon-theme-name' $themefile)"
