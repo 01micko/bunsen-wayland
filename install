@@ -50,9 +50,9 @@ echo "gtk: $g ; ico: $i ; cur: $c"
 n=0
 for t in gtk-theme icon-theme cursor-theme; do
      case $n in
-         0)theme="$g"
-         1)theme="$i"
-         2)theme="$c"
+         0)theme="$g";;
+         1)theme="$i";;
+         2)theme="$c";;
      esac
      echo setting "$t : $theme"
      gsettings set org.gnome.desktop.interface $t "$theme" || exit 1
