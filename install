@@ -32,7 +32,7 @@ fi
 # netsurf fixup hack
 echo "netsurf icon fixup hack"
 [ -f /usr/share/applications/netsurf-gtk.desktop ] && \
-    sed -i 's/netsurf\.png/netsurf/' \
+    sudo sed -i 's/netsurf\.png/netsurf/' \
     /usr/share/applications/netsurf-gtk.desktop || exit 1
 
 # themes fixup hack, from defaults in skell
