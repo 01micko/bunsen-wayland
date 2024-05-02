@@ -29,6 +29,12 @@ if [ ! -x /usr/bin/openbox ] ; then
     sudo rm -f /usr/share/xsessions/bunsenlabs.desktop || exit 1
 fi
 
+# netsurf fixup hack
+echo "netsurf icon fixup hack"
+[ -f /usr/share/applications/netsurf-gtk.desktop ] && \
+    sed -i 's/netsurf\.png/netsurf/' \
+    /usr/share/applications/netsurf-gtk.desktop || exit 1
+
 # themes fixup hack, from defaults in skell
 echo "setting themes to bunsen defaults"
 themefile=/usr/share/bunsen/skel/.config/gtk-3.0/settings.ini
@@ -39,9 +45,9 @@ icotheme="$(grep 'icon-theme-name' $themefile)"
 i="${icotheme/gtk-icon-theme-name = /}"
 curtheme"=$(grep 'cursor-theme-name' $themefile)"
 c="${curtheme/gtk-cursor-theme-name = /}"
+echo "gtk: $g ; ico: $i ; cur: $c"
 #gsettings get org.gnome.desktop.interface cursor-theme
 n=0
-( cd ~
 for t in gtk-theme icon-theme cursor-theme
      case $n in
          0)theme="$g"
@@ -52,7 +58,6 @@ for t in gtk-theme icon-theme cursor-theme
      gsettings set org.gnome.desktop.interface $t "$theme" || exit 1
      n=$((n + 1))
 done
-)
   
 echo "Done!" && sleep 2 && exit 0
 
