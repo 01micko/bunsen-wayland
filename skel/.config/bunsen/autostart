@@ -117,8 +117,9 @@ openbox)
 labwc)
     ## The following applications will only be started in an labwc session.
     ## Add a new clause for your compositor, if different.
-
+    
     ## Set a wallpaper
+    sleep 1
     IMG=/usr/share/images/bunsen/wallpapers/default/default
     if [ -f "$HOME/.config/bunsen/wall.conf" ];then
         . $HOME/.config/bunsen/wall.conf
@@ -132,11 +133,12 @@ labwc)
     conky -c $HOME/.config/conky/BL-Boron-conky-wayland.conf &
 
     ## Start sfwbar panel
-    ( sleep 2; sfwbar ) &
+    sleep 2
+    sfwbar &
     
-    ## screen lock
+    ## screen lock #weird bug with swaylock that doesn't see the image if >= 300 seconds delay
     swayidle -w \
-        timeout 300 "swaylock -f -i $IMG" \
+        timeout 299 "swaylock -f -i $IMG" \
         timeout 600 'wlopm --off *' \
         resume 'wlopm --on *' \
         before-sleep "swaylock -f -i $IMG" &

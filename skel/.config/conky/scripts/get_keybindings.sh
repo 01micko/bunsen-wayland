@@ -10,8 +10,8 @@ do
     if echo $entry | grep -q '<menu' ; then
         men=$(echo $entry | grep -o '>.*<' |tr -d '<' |tr -d '>')
         case $men in
-            *client*)menu="Show Client Menu";;
-            *root*)menu="Show Root Menu";;
+            *client*)menu="Client Menu";;
+            *root*)menu="Root Menu";;
             *)menu="$men";;
         esac
         echo $menu
@@ -39,8 +39,8 @@ do
                  action=${action#*=}
                  action=${action/\"/}
                  action=${action/\"/};;
-            *ShowMenu*client*)action="Show Client Menu";;
-            *ShowMenu*root*)action="Show Root Menu";;
+            *ShowMenu*client*)action="Client Menu";;
+            *ShowMenu*root*)action="Root Menu";;
             *ShowMenu*)action='';;
             *Close*)action="Close Window";;
             *ToggleMaximize*)action="Toggle Maximize";;
@@ -71,12 +71,12 @@ do
     elif echo $entry | grep -q '<command' ; then
         com=$(echo $entry | grep -o '>.*<' |tr -d '<' |tr -d '>')
         case $com in
-            defaultrun)comm="Run Command";;
+            *ofi*)comm="Run";; # covers tofi, wofi, rofi, yofi
             *lock*)comm="Lock Screen";;
-            *terminal*)comm="Open Terminal";;
-            *slurp*)comm="Screenshot(region)";;
+            *slurp*)comm="Screenshot(area)";;
             *grim*)comm="Screenshot";;
-            *lxtask*|*term*top*)comm="Process Manager";; # covers many terminals top|htop
+            *lxtask*|*term*top*)comm="Processes";; # covers many terminals top|htop
+            *term*|*tty*)comm="Terminal";; # covers many terminals
             *exit*|*logout*)comm="Log out";;
         esac
         echo $comm

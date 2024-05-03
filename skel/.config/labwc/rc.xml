@@ -30,7 +30,7 @@
     </keybind>
     <keybind key="W-r">
       <action name="Execute">
-        <command>defaultrun</command>
+        <command>tofi-drun<</command>
       </action>
     </keybind>
     <keybind key="C-A-t">
