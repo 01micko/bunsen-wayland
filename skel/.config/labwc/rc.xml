@@ -1,5 +1,18 @@
 <?xml version="1.0"?>
 <labwc_config>
+
+  <core>
+    <decoration>server</decoration>
+    <gap>0</gap>
+    <adaptiveSync>no</adaptiveSync>
+    <allowTearing>no</allowTearing>
+    <reuseOutputMode>no</reuseOutputMode>
+  </core>
+
+  <placement>
+    <policy>automatic</policy>
+  </placement>
+
   <theme>
     <name>Boron-aqua</name>
     <cornerRadius>6</cornerRadius>
@@ -10,38 +23,38 @@
       <weight>normal</weight>
     </font>
   </theme>
+
+  <resize popupShow="Always"/>
+
+  <desktops number="4"/>
+ 
+  <regions>
+    <region name="right" x="50%" y="0%" height="100%" width="50%"/>
+    <region name="left" x="0%" y="0%" height="100%" width="50%"/>
+  </regions>
+
   <keyboard>
-    <default/>
     <numlock>off</numlock>
+    <layoutScope>global</layoutScope>
+    <repeatRate>25</repeatRate>
+    <repeatDelay>600</repeatDelay>
+    <keybind key="A-Tab">
+      <action name="NextWindow" />
+    </keybind>
     <keybind key="A-F1">
-      <action name="ShowMenu">
-        <menu>root-menu</menu>
-      </action>
+      <action name="ShowMenu" menu="root-menu" />
     </keybind>
     <keybind key="A-F2">
-      <action name="Execute">
-        <command>tofi-drun</command>
-      </action>
+      <action name="Execute" command="tofi-drun" />
     </keybind>
     <keybind key="W-l">
-      <action name="Execute">
-        <command>bl-wlogout</command>
-      </action>
-    </keybind>
-    <keybind key="W-r">
-      <action name="Execute">
-        <command>tofi-drun<</command>
-      </action>
+	  <action name="Execute" command="bl-wlogout" />
     </keybind>
     <keybind key="C-A-t">
-      <action name="Execute">
-        <command>lxterminal</command>
-      </action>
+      <action name="Execute" command="lxterminal" />
     </keybind>
     <keybind key="Print">
-      <action name="Execute">
-        <command>grim</command>
-      </action>
+      <action name="Execute" command="grim" />
     </keybind>
     <keybind key="A-Print">
       <action name="Execute">
@@ -54,9 +67,7 @@
       </action>
     </keybind>
     <keybind key="C-A-Backspace">
-      <action name="Execute">
-        <command>blw-exit</command>
-      </action>
+      <action name="Execute" command="blw-exit" />
     </keybind>
     <keybind key="C-l">
       <action name="GoToDesktop" to="left" wrap="yes"/>
@@ -77,22 +88,7 @@
       <action name="SendToDesktop" to="right" wrap="yes"/>
     </keybind>
   </keyboard>
-  <desktops number="4"/>
-  <!--<margin top="4" bottom="4" left="4" right="4" output="HDMI-A-1"/>
-    <desktops>
-    <popupTime>1000</popupTime>
-    <names>
-      <name>x 1</name>
-      <name>x 2</name>
-      <name>x 3</name>
-      <name>x 4</name>
-    </names>
-  </desktops>
--->
-  <regions>
-    <region name="right" x="50%" y="0%" height="100%" width="50%"/>
-    <region name="left" x="0%" y="0%" height="100%" width="50%"/>
-  </regions>
+
   <mouse>
     <doubleClickTime>500</doubleClickTime>
     <scrollFactor>2.0</scrollFactor>
@@ -123,7 +119,7 @@
       </mousebind>
     </context>
   </mouse>
-  <resize popupShow="Always"/>
+
   <libinput>
     <device category="default">
       <naturalScroll>no</naturalScroll>
