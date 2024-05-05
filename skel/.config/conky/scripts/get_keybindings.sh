@@ -35,10 +35,6 @@ do
 		act=$(echo $entry | grep -o '".*"')
         #echo -n " ---- $act ---- "
         case $act in 
-            *Exe*)echo $act | grep -q 'command' && action=$(echo $act | grep -o 'command=.*"') || continue
-                 action=${action#*=}
-                 action=${action/\"/}
-                 action=${action/\"/};;
             *ShowMenu*client*)action="Client Menu";;
             *ShowMenu*root*)action="Root Menu";;
             *ShowMenu*)action='';;
@@ -66,16 +62,25 @@ do
             *SnapToRegion*\"bottom-left\")action="Snap to bottom left";;
             *SnapToRegion*\"bottom\")action="Snap to bottom";;
             *SnapToRegion*\"bottom-right\")action="Snap to bottom right";;
+            *term*|*tty*)action="Terminal";; # covers many terminals
+            *exit*|*logout*)action="Log out";;
+            *ofi*|*run*)action="Run";; # covers tofi, wofi, rofi, yofi
+            *grim*)action="Screenshot";;
+            *lock*)action="Lock Screen";;
+            *Exe*)echo $act | grep -q 'command' && action=$(echo $act | grep -o 'command=.*"') || continue
+                 action=${action#*=}
+                 action=${action/\"/}
+                 action=${action/\"/};;
         esac
         [ -n "$action" ] && echo "$action"
     elif echo $entry | grep -q '<command' ; then
         com=$(echo $entry | grep -o '>.*<' |tr -d '<' |tr -d '>')
         case $com in
-            *ofi*)comm="Run";; # covers tofi, wofi, rofi, yofi
+            *ofi*|*run*)comm="Run";; # covers tofi, wofi, rofi, yofi
             *lock*)comm="Lock Screen";;
             *slurp*)comm="Screenshot(area)";;
             *grim*)comm="Screenshot";;
-            *lxtask*|*term*top*)comm="Processes";; # covers many terminals top|htop
+            *lxtask*|*term*top*|*process*)comm="Processes";; # covers many terminals top|htop
             *term*|*tty*)comm="Terminal";; # covers many terminals
             *exit*|*logout*)comm="Log out";;
         esac
