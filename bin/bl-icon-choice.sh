@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
+
 # set theme
 change_icon_theme() {
     theme="$1"
@@ -27,6 +28,8 @@ change_icon_theme() {
     sed -i "s/gtk-icon-theme-name=.*$/gtk-icon-theme-name=$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme_error 1
 }
 
+# kill parent if exists
+[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
 # find themes
 var=$(find /usr/share/icons -type d -name "48*" | grep -v hicolor | sed -e 's/\/48.*$//' -e 's/\/usr\/share\/icons\///' -e 's/ /_/' | while read -r i; do \
   echo -n "false $i ";done | sed 's/^false /true /')
@@ -37,4 +40,4 @@ OUT=$(yad --title="Icon Theme" --window-icon=preferences-desktop-icons --name=pr
   --width=350 --height=300 \
   --column=Choose --column="Icon Theme" \
   $var | sed 's/TRUE//' | tr -d '|')
-[[ -n "$OUT" ]] && change_icon_theme "$OUT" || bl-theme_error 1
+[[ -n "$OUT" ]] && change_icon_theme "$OUT" || bl-theme_error 2

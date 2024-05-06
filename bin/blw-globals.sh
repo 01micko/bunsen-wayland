@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
-# set theme (0 for gtk, 1 for icons)
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
+
+# set theme
 change_theme() {
     theme=("$@")
     echo ${theme[0]}
-    echo ${theme[1]} ${theme[2]} ${theme[3]}
+    echo ${theme[1]} ${theme[2]} ${theme[3]} ${theme[4]}
     [[ "${theme[0]}" == "$CUR_THEME" ]] && bl-theme_error 0 && exit 0
 
     yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
@@ -16,7 +17,6 @@ change_theme() {
         0);;
         *)exit;;
     esac
-    exit
     
     # gtk
     change_g ${theme[1]} 0 || bl-theme_error 1
@@ -26,8 +26,8 @@ change_theme() {
     n=$((n + 1))
     [[ -d "/usr/share/themes/${theme[1]}/openbox-3" ]] && \
       sed -i "${n}s/<name>.*$/<name>${theme[1]}<\/name>/" $HOME/.config/labwc/rc.xml || bl-theme_error 1
-      # reconfigure labwc
-      labwc -r || bl-theme_error 0
+    # reconfigure labwc
+    labwc -r || bl-theme_error 0
     # icons
     change_g ${theme[2]} 1 || bl-theme_error 1
     # wall
@@ -37,10 +37,13 @@ change_theme() {
     # set if now
     swaybg -i "$dir/${theme[3]}" -m stretch &
     # finally, fix the config
-    sed -i "s/true/false/" $HOME/.config/bunsen/global_themes.conf
+    sed -i "s/true/false/g" $HOME/.config/bunsen/global_themes.conf
     line_no=$(grep -n "${theme[0]}" $HOME/.config/bunsen/global_themes.conf)
     line_no=${line_no%\:*}
-    sed -i "${line_no}s/false/${theme[4]}/" $HOME/.config/bunsen/global_themes.conf
+    sed -i "${line_no}s/false/true/" $HOME/.config/bunsen/global_themes.conf
+    # restart sfwbar if running
+    sf=$(pidof sfwbar)
+    [[ -n "$sf" ]] && kill -HUP $sf
 }
 
 # change gsettings
@@ -58,19 +61,20 @@ change_g() {
         [[ -d "/usr/share/themes/$1/gtk-3.0" ]] && \
           sed -i "s/gtk-theme-name=.*$/gtk-theme-name=$1/" $HOME/.config/gtk-3.0/settings.ini || return 1
         [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
-        [[ -d "/usr/share/themes/$1/gtk-4.0" ]] && \
           sed -i "s/gtk-theme-name=.*$/gtk-theme-name=$1/" $HOME/.config/gtk-4.0/settings.ini || return 1
     else
         [[ -f "$HOME/.gtkrc-2.0" ]] && \
           sed -i "s/gtk-icon-theme-name=.*$/gtk-icon-theme-name=\"$1\"/" $HOME/.gtkrc-2.0 || return 1
-        [[ -f "$HOME/.gtkrc-2.0" ]] && \
+        [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && \
           sed -i "s/gtk-icon-theme-name=.*$/gtk-icon-theme-name=$1/" $HOME/.config/gtk-3.0/settings.ini || return 1
-        [[ -f "$HOME/.gtkrc-2.0" ]] && \
+        [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
           sed -i "s/gtk-icon-theme-name=.*$/gtk-icon-theme-name=$1/" $HOME/.config/gtk-4.0/settings.ini || return 1
     fi
     return 0
 }
 
+# kill parent if exists
+[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
 # find themes
 . $HOME/.config/bunsen/global_themes.conf
 [[ "${BL_AQUA[4]}" == 'true' ]] && CUR_THEME=${BL_AQUA[0]}
@@ -88,6 +92,4 @@ OUT=($(yad --title="Global Theme - Currently: $CUR_THEME" --window-icon=preferen
   --column=GTK --column=ICONS --column=Wallpaper \
   $var | sed 's/TRUE//' | tr '|' ' '))
 
-[[ -n "$OUT" ]] && {
-    change_theme "${OUT[@]}"
-} || bl-theme_error 2 
+[[ -n "$OUT" ]] && change_theme "${OUT[@]}" || bl-theme_error 2 

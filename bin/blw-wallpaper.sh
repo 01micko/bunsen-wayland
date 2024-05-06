@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
 
 # set the image
 set_wall() {
@@ -30,6 +30,8 @@ set_wall() {
     swaybg -i "$1" -m stretch &
 }
 
+# kill parent if exists
+[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
 # find the image
 cd $HOME/Pictures/wallpapers/bunsen/default
 OUT=$(yad --title="Wallpaper" --window-icon=preferences-desktop-wallpaper \
@@ -37,4 +39,4 @@ OUT=$(yad --title="Wallpaper" --window-icon=preferences-desktop-wallpaper \
   --image-on-top --text="<big><big>Select a wallpaper and press OK</big></big>" \
   --file)
 cd -
-[[ -n "$OUT" ]] && set_wall $OUT
+[[ -n "$OUT" ]] && set_wall $OUT || bl-theme_error 2

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
+
 # starter script for icon, wallpaper, gtk and cursor choices.
 
 yad --title="Appearance Settings" \
@@ -14,4 +15,3 @@ yad --title="Appearance Settings" \
   --button=" GTK Theme!preferences-desktop-theme!choose gtk theme":'bash -c "bl-gtk-choice.sh &"' \
   --button=" Cursor Theme!preferences-desktop-cursors!choose cursor style":'bash -c "bl-cursor-choice.sh &"' \
   --button=" Global Theme!preferences-desktop-theme!choose a global theme for gtk, icons, wallpaper":'bash -c "blw-globals.sh &"'
- 

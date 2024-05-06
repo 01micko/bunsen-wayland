@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
+
 # set theme
 change_gtk_theme() {
     theme=$1
@@ -38,6 +39,8 @@ change_gtk_theme() {
       labwc -r || bl-theme_error 0
 }
 
+# kill parent if exists
+[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
 # find themes
 var=$(find /usr/share/themes -type d -name gtk-3.0 | sed -e 's/\/usr\/share\/themes\///' -e 's/\/gtk\-3\.0$//' -e 's/ /_/g' | while read -r i; do \
   echo -n "false $i ";done | sed 's/^false / true /')
@@ -48,5 +51,5 @@ OUT=$(yad --title="GTK Theme" --window-icon=preferences-desktop-theme --name=pre
   --width=350 --height=300 \
   --column=Choose --column="GTK Theme" \
   $var | sed 's/TRUE//' | tr -d '|')
-[[ -n "$OUT" ]] && change_gtk_theme "$OUT" || bl-theme_error 1
+[[ -n "$OUT" ]] && change_gtk_theme "$OUT" || bl-theme_error 2
 

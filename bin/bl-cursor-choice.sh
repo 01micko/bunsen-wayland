@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# (c) Copyright 2024 Mick Amadio <01micko@gmail.com>
+# (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
+
 # set theme
 change_cursor_theme() {
     theme=$1
@@ -33,6 +34,8 @@ change_cursor_theme() {
     fi
 }
 
+# kill parent if exists
+[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
 # find themes
 var=$(find /usr/share/icons -type d -name cursors  | sed -e 's/\/usr\/share\/icons\///' -e 's/\/cursors//' | while read -r i; do \
   echo -n "false $i ";done | sed 's/^false /true /')
@@ -43,4 +46,4 @@ OUT=$(yad --title="Icon Theme" --window-icon=preferences-desktop-cursors --name=
   --width=350 --height=300 \
   --column=Choose --column="Cursor Theme" \
   $var | sed 's/TRUE//' | tr -d '|')
-[[ -n "$OUT" ]] && change_cursor_theme "$OUT" || bl-theme_error 1
+[[ -n "$OUT" ]] && change_cursor_theme "$OUT" || bl-theme_error 2
