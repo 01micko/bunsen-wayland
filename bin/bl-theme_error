@@ -6,6 +6,7 @@
 case $1 in
   0)ico=warning;text="Themes are the same!";;
   1)ico=error;text="Something went horribly wrong!";;
+  2)ico=information;text="Cancelled by $USER";;
 esac
 
 yad --title="Appearance Settings" \
