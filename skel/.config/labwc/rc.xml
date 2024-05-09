@@ -132,4 +132,16 @@
       <disableWhileTyping/>
     </device>
   </libinput>
+
+  <windowRules>
+    <windowRule identifier="dialog-*" matchOnce="false">
+      <action name="MoveTo" x="760" y="490"/>
+      <action name="ResizeTo" width="400" height="100"/>
+    </windowRule>
+    <windowRule identifier="preferences-*" matchOnce="false">
+      <action name="MoveTo" x="685" y="353"/>
+      <action name="ResizeTo" width="550" height="375"/>
+    </windowRule>
+  </windowRules>
+
 </labwc_config>

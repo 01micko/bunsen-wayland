@@ -6,6 +6,13 @@
   <item label="File Manager"><action name="Execute" command="thunar" /></item>
   <item label="Web Browser"><action name="Execute" command="netsurf" /></item>
   <item label="Terminal"><action name="Execute" command="lxterminal" /></item>
+  <item label="Delayed Scrot">
+    <action name="Execute">
+      <command>bash -c "sleep 5; grim -g \"`slurp`\""</command>
+    </action>
+  </item>
+  <item label="Look and Feel"><action name="Execute" command="blw-appearance.sh" /></item>
+  <separator />
   <item label="Reconfigure"><action name="Reconfigure" /></item>
   <item label="Exit"><action name="Execute" command="blw-exit" /></item>
 </menu>

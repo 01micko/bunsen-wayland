@@ -36,7 +36,8 @@ set_wall() {
 cd $HOME/Pictures/wallpapers/bunsen/default
 OUT=$(yad --title="Wallpaper" --window-icon=preferences-desktop-wallpaper \
   --name=preferences-desktop-wallpaper --image=preferences-desktop-wallpaper \
+  --width=550 --height=375 \
   --image-on-top --text="<big><big>Select a wallpaper and press OK</big></big>" \
   --file)
 cd -
-[[ -n "$OUT" ]] && set_wall $OUT || bl-theme_error 2
+[[ -n "$OUT" ]] && set_wall $OUT || bl-theme-msg 3

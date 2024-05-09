@@ -45,6 +45,11 @@ echo "adding custom theme"
 sudo chown -R root:root themes/* || exit 1
 sudo cp -r themes/* /usr/share/themes/ || exit 1
 
+# man pages
+echo "adding custom theme"
+sudo chown -R root:root man/* || exit 1
+sudo cp man/* /usr/share/man/man1 || exit 1
+
 # themes fixup hack, from defaults in skell
 echo "setting themes to bunsen defaults"
 themefile=/usr/share/bunsen/skel/.config/gtk-3.0/settings.ini

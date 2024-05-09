@@ -9,7 +9,8 @@ change_gtk_theme() {
     theme=${theme/_/ } # do it twice if 2 spaces
     echo "$theme"
     curtheme=$(gsettings get org.gnome.desktop.interface gtk-theme)
-    if [[ "$theme" == "$(echo $curtheme|tr -d "'")" ]];then
+    curtheme="$(echo $curtheme|tr -d "'")"
+    if [[ "$theme" == "$curtheme" ]];then
         bl-theme_error 0
     fi
     yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
@@ -22,13 +23,13 @@ change_gtk_theme() {
     gsettings set org.gnome.desktop.interface gtk-theme "$theme"
     [[ -f "$HOME/.gtkrc-2.0" ]] && \
      [[ -d "/usr/share/themes/$theme/gtk-2.0" ]] && \
-     sed -i "s/gtk-theme-name=.*$/gtk-theme-name=\"$theme\"/" $HOME/.gtkrc-2.0 || bl-theme_error 1
+     sed -i "s/$curtheme/$theme/" $HOME/.gtkrc-2.0 || bl-theme_error 1
     [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && \
       [[ -d "/usr/share/themes/$theme/gtk-3.0" ]] && \
-      sed -i "s/gtk-theme-name=.*$/gtk-theme-name=$theme/" $HOME/.config/gtk-3.0/settings.ini || bl-theme_error 1
+      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-3.0/settings.ini || bl-theme_error 1
     [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
       [[ -d "/usr/share/themes/$theme/gtk-4.0" ]] && \
-      sed -i "s/gtk-theme-name=.*$/gtk-theme-name=$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme_error 1
+      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme_error 1
     # if there's an openbox theme do that too
     n=$(grep -n '<theme>' $HOME/.config/labwc/rc.xml)
     n=${n%\:*}
@@ -48,8 +49,8 @@ var=$(find /usr/share/themes -type d -name gtk-3.0 | sed -e 's/\/usr\/share\/the
 # yad gui
 OUT=$(yad --title="GTK Theme" --window-icon=preferences-desktop-theme --name=preferences-desktop-theme \
   --list --radiolist \
-  --width=350 --height=300 \
+  --width=550 --height=375 \
   --column=Choose --column="GTK Theme" \
   $var | sed 's/TRUE//' | tr -d '|')
-[[ -n "$OUT" ]] && change_gtk_theme "$OUT" || bl-theme_error 2
+[[ -n "$OUT" ]] && change_gtk_theme "$OUT" || bl-theme-msg 3
 
