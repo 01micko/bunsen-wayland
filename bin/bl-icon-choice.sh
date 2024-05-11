@@ -29,7 +29,8 @@ change_icon_theme() {
 }
 
 # kill parent if exists
-[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
+read BPID b c <<<$(pidof yad)
+[[ -n "$BPID" ]] && kill -KILL $BPID >/dev/null 2>&1
 # find themes
 var=$(find /usr/share/icons -type d -name "48*" | grep -v hicolor | sed -e 's/\/48.*$//' -e 's/\/usr\/share\/icons\///' -e 's/ /_/' | while read -r i; do \
   echo -n "false $i ";done | sed 's/^false /true /')

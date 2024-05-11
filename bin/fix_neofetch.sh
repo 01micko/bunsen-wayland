@@ -26,7 +26,7 @@ nchars=$((nchars - nmin))
 printf -v ent "%${nchars}s" "$entpre"
 
 # sed "i" inserts a line at line number
-sed "1807i \\${ent}" < /usr/bin/neofetch > $HOME/bin/neofetch2
+sed "${n}i \\${ent}" < /usr/bin/neofetch > $HOME/bin/neofetch2
 
 # fix permission
 chmod 755 $HOME/bin/neofetch2

@@ -30,8 +30,15 @@ set_wall() {
     swaybg -i "$1" -m stretch &
 }
 
+# this script is wayland dependant
+[[ -n "$WAYLAND_DISPLAY" ]] || {
+    bl-theme-msg 5
+    exit 5
+}
+
 # kill parent if exists
-[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
+read BPID b c <<<$(pidof yad)
+[[ -n "$BPID" ]] && kill -KILL $BPID >/dev/null 2>&1
 # find the image
 cd $HOME/Pictures/wallpapers/bunsen/default
 OUT=$(yad --title="Wallpaper" --window-icon=preferences-desktop-wallpaper \

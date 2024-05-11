@@ -9,6 +9,7 @@ case $1 in
   1)ico=warning;text="Themes are the same!";;
   2)ico=error;text="Something went horribly wrong!";;
   3)ico=information;text="Cancelled by you $USER";;
+  5)ico=error;text="You are not running wayland!";;
 esac
 
 yad --title="Appearance Settings" --center \

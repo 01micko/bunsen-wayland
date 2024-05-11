@@ -35,15 +35,14 @@ change_cursor_theme() {
 }
 
 # kill parent if exists
-[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
+read BPID b c <<<$(pidof yad)
+[[ -n "$BPID" ]] && kill -KILL $BPID >/dev/null 2>&1
 # find themes
 var=$(find /usr/share/icons -type d -name cursors  | sed -e 's/\/usr\/share\/icons\///' -e 's/\/cursors//' | while read -r i; do \
   echo -n "false $i ";done | sed 's/^false /true /')
 
 # yad gui
 OUT=$(yad --title="Icon Theme" --window-icon=preferences-desktop-cursors --name=preferences-desktop-cursors \
-  --list --radiolist \
-  ---width=550 --height=375 \
-  --column=Choose --column="Cursor Theme" \
+  --list --radiolist --column=Choose --column="Cursor Theme" \
   $var | sed 's/TRUE//' | tr -d '|')
 [[ -n "$OUT" ]] && change_cursor_theme "$OUT" || bl-theme-msg 3

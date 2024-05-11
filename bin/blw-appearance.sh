@@ -3,6 +3,11 @@
 # (c) Copyright 2024 Mick Amadio <01micko@gmail.com> GPL3
 
 # starter script for icon, wallpaper, gtk and cursor choices.
+# this script is wayland dependant
+[[ -n "$WAYLAND_DISPLAY" ]] || {
+    bl-theme-msg 5
+    exit 5
+}
 
 yad --title="Appearance Settings" \
   --window-icon=distributor-logo-bunsenlabs --name=distributor-logo-bunsenlabs \
@@ -14,4 +19,4 @@ yad --title="Appearance Settings" \
   --button=" Icon Theme!preferences-desktop-icons!choose icons":'bash -c "bl-icon-choice.sh &"' \
   --button=" GTK Theme!preferences-desktop-theme!choose gtk theme":'bash -c "bl-gtk-choice.sh &"' \
   --button=" Cursor Theme!preferences-desktop-cursors!choose cursor style":'bash -c "bl-cursor-choice.sh &"' \
-  --button=" Global Theme!preferences-desktop-theme!choose a global theme for gtk, icons, wallpaper":'bash -c "blw-globals.sh &"'
+  --button=" Global Theme!preferences-desktop-theme!choose a global theme for gtk, icons, wallpaper":'bash -c "blw-globals.sh &"' \

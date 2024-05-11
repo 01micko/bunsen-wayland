@@ -88,8 +88,15 @@ case $1 in
     -h|--help)usage;;
 esac
 
+# this script is wayland dependant
+[[ -n "$WAYLAND_DISPLAY" ]] || {
+    bl-theme-msg 5
+    exit 5
+}
+
 # kill parent if exists
-[[ -n "$(pidof yad)" ]] && kill $(pidof yad) >/dev/null 2>&1
+read BPID b c <<<$(pidof yad)
+[[ -n "$BPID" ]] && kill -KILL $BPID >/dev/null 2>&1
 
 TDIR=$(mktemp -d /tmp/globalsXXXX)
 trap "rm -rf $TDIR" EXIT

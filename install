@@ -46,7 +46,7 @@ sudo chown -R root:root themes/* || exit 1
 sudo cp -r themes/* /usr/share/themes/ || exit 1
 
 # man pages
-echo "adding custom theme"
+echo "adding custom theme man page"
 sudo chown -R root:root man/* || exit 1
 sudo cp man/* /usr/share/man/man1 || exit 1
 
@@ -61,7 +61,7 @@ i="${icotheme/gtk-icon-theme-name=/}"
 curtheme="$(grep 'cursor-theme-name' $themefile)"
 c="${curtheme/gtk-cursor-theme-name=/}"
 echo "gtk: $g ; ico: $i ; cur: $c"
-#gsettings get org.gnome.desktop.interface cursor-theme
+# gsettings get org.gnome.desktop.interface cursor-theme
 n=0
 for t in gtk-theme icon-theme cursor-theme; do
      case $n in
