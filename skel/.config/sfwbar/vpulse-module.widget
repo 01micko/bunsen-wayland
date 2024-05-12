@@ -51,9 +51,9 @@ layout {
       "\nPort: " + Pulse("sink-port") +
       "\nMonitor: " + Pulse("sink-monitor")
     style = If(Ident(pulse),"module","hidden")
-    action[1] = PulseCmd "sink-mute toggle"
+    action[3] = PulseCmd "sink-mute toggle"
     action[2] = Exec $XPulseAction
-    action[3] = PopUp "XPulseWindow"
+    action[1] = PopUp "XPulseWindow"
     action[4] = PulseCmd "sink-volume +1"
     action[5] = PulseCmd "sink-volume -1"
     css = "* { min-height: 18px; min-width: 18px; padding: 2px; }"
