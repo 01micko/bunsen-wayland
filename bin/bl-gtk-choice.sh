@@ -8,10 +8,9 @@ change_gtk_theme() {
     theme=${theme/_/ }
     theme=${theme/_/ } # do it twice if 2 spaces
     echo "$theme"
-    curtheme=$(gsettings get org.gnome.desktop.interface gtk-theme)
-    curtheme="$(echo $curtheme|tr -d "'")"
+    curtheme=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
     if [[ "$theme" == "$curtheme" ]];then
-        bl-theme_error 0
+        bl-theme_msg 0
     fi
     yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
                 --image=dialog-question \
@@ -23,20 +22,20 @@ change_gtk_theme() {
     gsettings set org.gnome.desktop.interface gtk-theme "$theme"
     [[ -f "$HOME/.gtkrc-2.0" ]] && \
      [[ -d "/usr/share/themes/$theme/gtk-2.0" ]] && \
-     sed -i "s/$curtheme/$theme/" $HOME/.gtkrc-2.0 || bl-theme_error 1
+     sed -i "s/$curtheme/$theme/" $HOME/.gtkrc-2.0 || bl-theme-msg 2
     [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && \
       [[ -d "/usr/share/themes/$theme/gtk-3.0" ]] && \
-      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-3.0/settings.ini || bl-theme_error 1
+      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-3.0/settings.ini || bl-theme-msg 2
     [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
       [[ -d "/usr/share/themes/$theme/gtk-4.0" ]] && \
-      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme_error 1
+      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme-msg 2
     # if there's an openbox theme do that too for labwc
     if [[ -r $HOME/.config/labwc/rc.xml ]];then
         n=$(grep -n '<theme>' $HOME/.config/labwc/rc.xml)
         n=${n%\:*}
         n=$((n + 1))
         [[ -d "/usr/share/themes/$theme/openbox-3" ]] && \
-          sed -i "${n}s/<name>.*$/<name>$theme<\/name>/" $HOME/.config/labwc/rc.xml || bl-theme_error 1
+          sed -i "${n}s/<name>.*$/<name>$theme<\/name>/" $HOME/.config/labwc/rc.xml || bl-theme-msg 2
         # reconfigure labwc
         labwc -r || bl-theme_error 0
     fi

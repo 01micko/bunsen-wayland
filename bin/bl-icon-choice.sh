@@ -21,11 +21,11 @@ change_icon_theme() {
     esac
     gsettings set org.gnome.desktop.interface icon-theme "$theme"
     [[ -f "$HOME/.gtkrc-2.0" ]] && \
-      sed -i "s/$curtheme/$theme/" $HOME/.gtkrc-2.0 || bl-theme_error 1
+      sed -i "s/$curtheme/$theme/" $HOME/.gtkrc-2.0 || bl-theme-msg 2
     [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && \
-      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-3.0/settings.ini || bl-theme_error 1
+      sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-3.0/settings.ini || bl-theme-msg 2
     [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
-    sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme_error 1
+    sed -i "s/$curtheme/$theme/" $HOME/.config/gtk-4.0/settings.ini || bl-theme-msg 2
 }
 
 # kill parent if exists

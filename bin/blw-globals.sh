@@ -6,7 +6,7 @@ confirm_dialog() {
     yad --title="Confirm" --window-icon=dialog-question --name=dialog-question \
         --image=dialog-question \
         --text="Do you want to change the global theme from $1 to $2?\n \
-        This changes gtk-theme, icon-theme and wallpaper"
+        This changes gtk-theme, icon-theme, cursor-theme and wallpaper"
     return $?
 }
 
@@ -32,12 +32,14 @@ change_theme() {
     labwc -r || bl-theme_error 0
     # icons
     change_g ${theme[2]} 1 ${CUR_THEME[2]}
+    # cursor
+    change_g ${theme[3]} 2 ${CUR_THEME[3]}
     # wall
     dir="$HOME/Pictures/wallpapers/bunsen/default"
     # write to config for labwc/autostart (swaybg and swaylock)
-    echo "WALL=$dir/${theme[3]}" > $HOME/.config/bunsen/wall.conf
+    echo "WALL=$dir/${theme[4]}" > $HOME/.config/bunsen/wall.conf
     # set it now
-    swaybg -i "$dir/${theme[3]}" -m stretch &
+    swaybg -i "$dir/${theme[4]}" -m stretch &
     # finally, fix the config
     sed -i "s/true/false/g" $HOME/.config/bunsen/global_themes.conf
     line_no=$(grep -n "${theme[0]}" $HOME/.config/bunsen/global_themes.conf)
@@ -70,8 +72,22 @@ change_g() {
         [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
           sed -i "s/$3/$1/" $HOME/.config/gtk-4.0/settings.ini || return 2
         ;;
-    esac
-    return 0 # success
+        2)gsettings set org.gnome.desktop.interface cursor-theme "$1"
+         [[ -f "$HOME/.gtkrc-2.0" ]] && \
+          sed -i "s/$3/$1/" $HOME/.gtkrc-2.0 || return 2
+        [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && \
+          sed -i "s/$3/$1/" $HOME/.config/gtk-3.0/settings.ini || return 2
+        [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]] && \
+          sed -i "s/$3/$1/" $HOME/.config/gtk-4.0/settings.ini || return 2
+        # set for labwc; others later, sway, hyprland etc
+        if grep -q 'XCURSOR_THEME' $HOME/.config/labwc/environment;then
+            sed -i "s/XCURSOR_THEME.*$/XCURSOR_THEME=$theme/" $HOME/.config/labwc/environment || return 2
+        else
+            echo "XCURSOR_THEME=$theme" >> $HOME/.config/labwc/environment || return 2
+        fi        
+        ;;
+   esac
+   return 0 # success
 }
 
 usage() {
@@ -103,26 +119,24 @@ trap "rm -rf $TDIR" EXIT
 
 # find themes
 . $HOME/.config/bunsen/global_themes.conf
-while read -r a b c d e
+while read -r a b c d e f
 do 
   [[ "$a" == '#' ]] && continue
   printf "  %s \"%s%s%s%s\" %s %s %s %s %s%s%s%s%s\n" '[[' "\${" \
-    "${a%\=*}" '[4]' '}' '==' "'true'" ']]' \
+    "${a%\=*}" '[5]' '}' '==' "'true'" ']]' \
     '&&' 'CUR_THEME=' '(${' "${a%\=*}[@]})" >> $TDIR/themes.conf
 done < $HOME/.config/bunsen/global_themes.conf
 printf "%s%s\n" "CUR_THEME=" '${CUR_THEME[0]}'>> $TDIR/themes.conf
 printf "%s" 'var="'>> $TDIR/themes.conf
-while read -r a b c d e
+while read -r a b c d e f
 do 
   [[ "$a" == '#' ]] && continue
-  ee=${e%\)}
-  aa=${a#*\=}
-  printf "%s%s%s%s %s%s%s%s %s%s%s%s %s%s%s%s %s%s%s%s\n" \
-   '${' "${a%\=*}" '[4]' '}' '${' "${a%\=*}" '[0]' '}' \
-   '${' "${a%\=*}" '[1]' '}' '${' "${a%\=*}" '[2]' '}' \
-   '${' "${a%\=*}" '[3]' '} \' >> $TDIR/themes.conf
+  printf "%s%s%s%s %s%s%s%s %s%s%s%s %s%s%s%s %s%s%s%s %s%s%s%s\n" \
+'${' "${a%\=*}" '[5]' '}' '${' "${a%\=*}" '[0]' '}' \
+'${' "${a%\=*}" '[1]' '}' '${' "${a%\=*}" '[2]' '}' \
+'${' "${a%\=*}" '[3]' '}' '${' "${a%\=*}" '[4]' '}' >> $TDIR/themes.conf
 done < $HOME/.config/bunsen/global_themes.conf
-printf "%s" '"'>> $TDIR/themes.conf
+printf "%s\n" '"'>> $TDIR/themes.conf
 . $TDIR/themes.conf
 
 # main gui
@@ -130,9 +144,8 @@ OUT=($(yad --title="Global Theme - Currently: ${CUR_THEME[0]}" --window-icon=pre
   --list --radiolist \
   --width=700 --height=300 \
   --column=Choose --column=Name \
-  --column=GTK --column=ICONS --column=Wallpaper \
+  --column=GTK --column=ICONS --column=CURSOR --column=Wallpaper \
   $var | sed 's/TRUE//' | tr '|' ' '))
-
 if [[ -n "$OUT" ]];then
     change_theme "${OUT[@]}"
     ret=$?

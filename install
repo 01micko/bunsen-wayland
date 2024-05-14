@@ -13,6 +13,7 @@ sudo cp -a applications/* /usr/share/applications/ || exit 1
 # scripts
 echo "copying scripts."
 sudo chown root:root bin/* || exit 1
+sudo chmod 755 bin/* || exit 1
 sudo cp -a bin/* /usr/bin/ || exit 1
 
 # configs

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Yad Color Picker
+Icon=select-color
+Comment=Pick color
+Exec=wly_colpick
+Terminal=false
+Type=Application
+Categories=X-GraphicUtility
+GenericName=Color Picker
