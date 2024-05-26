@@ -2,5 +2,5 @@
 vt = 1
 
 [default_session]
-command = "cage -s -- nwg-hello"
+command = "labwc -s nwg-hello; kill -9 $(pidof labwc)"
 user = "_greetd"
