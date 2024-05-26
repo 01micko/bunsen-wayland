@@ -2,5 +2,5 @@
 vt = 1
 
 [default_session]
-command = "labwc -s nwg-hello; kill -9 $(pidof labwc)"
+command = "labwc -s 'nwg-hello && labwc -e'"
 user = "_greetd"
