@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Yad Color Picker
-Icon=select-color
+Icon=colpick
 Comment=Pick color
 Exec=wly_colpick
 Terminal=false

@@ -8,19 +8,58 @@ find_color() {
     printf "%d" "0x${1}"
 }
 
+yad_error() {
+    yad --title=error --window-icon="dialog-error" --name="dialog-error" \
+     --text="Error: $1" \
+      --button="Close!dialog-error":1
+    exit 1
+}
+
 # uses pnmtoxpm to make a 1px xpm image
 get_col() {
     col=$(pos="$(slurp -b FFFFFF00 -p)";sleep 1; grim -g "$pos" -t ppm - | ppmtoxpm | grep -m1 '" c.*"' | sed -e 's/\" c //' -e 's/\".*$//')
     echo $col
 }
 
+# parses an rgb color to hex from rgb.txt
+parse_rgb() {
+    incol="$1"    
+    while read -r r g b c1 c2; do
+        colsearch="$c1 $c2"
+        chars=${#incol}
+        val=$(expr match "${colsearch,,}" "${incol,,}")
+        if [[ $chars -eq $val ]];then
+            printf "%s%x" '#' "$r"
+            printf "%x" "$g"
+            printf "%x" "$b"
+            break        
+        fi
+    done < ${2}
+}
+
 # shows our selected hex, rgb() and float notation colors
 return_gui() {
+    col_in="$1"
+    # we might get a word color like 'gray20' or 'ghost white'
+    if [[ "${col_in:0:1}" == [[:alpha:]] ]];then
+        [[ -r "$HOME/.config/colpick.conf" ]] && \
+            . $HOME/.config/colpick.conf
+        rgb_txt=$rgb_txt
+        # may not be installed if X not installed
+        [[ -z "$rgb_txt" ]] && \
+        rgb_txt=/etc/X11/rgb.txt
+        # last resort, has no spaces in names, camel case
+        [[ -z "$rgb_txt" ]] && \
+        rgb_txt=/usr/share/netpbm/rgb.txt 
+        [[ -z "$rgb_txt" ]] && return 1
+        # we got here we try to parse the color
+        col_in=$(parse_rgb "$col_in" "$rgb_txt")
+    fi
     echo -e '<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"  height="48px" width="48px" viewBox="0 0 48 48">
-  <path d="m 0 0 48 0 0 48 -48 0 z" style="fill:'$1';stroke:none;"/>
+  <path d="m 0 0 48 0 0 48 -48 0 z" style="fill:'$col_in';stroke:none;"/>
 </svg>' > $TEMPDIR/col.svg
-    BCOL=${1/\#/}
+    BCOL=${col_in/\#/}
     BR=${BCOL:0:2}; BG=${BCOL:2:2}; BB=${BCOL:4:2};
     BHR=$(find_color $BR)
     BHG=$(find_color $BG)
@@ -34,23 +73,24 @@ return_gui() {
     [[ ${BHG:0:1} = '.' ]] && X=0
     [[ ${BHB:0:1} = '.' ]] && X=0
     ZF=''$X$BHR' '$X$BHG' '$X$BHB''
-    yad --title="Color Picker" --name="select-color" --form \
+    yad --title="Color Picker" --name="colpick" --form \
     --image="$TEMPDIR/col.svg" --text=" Copy and paste color found\n to your application:" \
-    --field="Color Hex" "$1" \
+    --field="Color Hex" "$col_in" \
     --field="Color rgb" "$ZC" \
     --field="Color float" "$ZF" \
     --button="Ok!gtk-ok":0
+    return 0
 }
 
-export -f find_color get_col return_gui
+export -f find_color get_col return_gui yad_error parse_rgb
 
 # this script is wayland dependant
 [[ -n "$WAYLAND_DISPLAY" ]] || {
-    yad --title=error --window-icon="dialog-error" --name="dialog-error" \
-      --text="Error: This applicatiom <b>must</b> be run in a wayland session." \
-      --button="Close!dialog-error":1
+    yad_error "Error: This applicatiom <b>must</b> be run in a wayland session."
     exit 1
 }
+
+ver=0.1
 
 export TEMPDIR
 TEMPDIR=$(mktemp -d /tmp/colpickXXXX)
@@ -59,9 +99,12 @@ TEMPDIR=$(mktemp -d /tmp/colpickXXXX)
 trap "rm -rf $TEMPDIR" EXIT
 
 # main gui
-ret=$(yad --title="Color Picker" --window-icon="select-color" --name="select-color" \
+ret=$(yad --title="Color Picker $ver" --name="colpick" \
     --text="Click the Select button then place the cursor \n on screen where you want to fetch the color" \
     --buttons-layout=center \
-    --button="Select!preferences-desktop-cursors!choose place on screen":'bash -c "get_col && kill -USR1 $YAD_PID"')
+    --button="Select!colpick!choose place on screen":'bash -c "get_col && kill -USR1 $YAD_PID"')
 [[ $? -ne 0 ]] && exit
-return_gui $ret
+return_gui $ret || {
+    yad_error "Sorry no rgb.txt found.\
+\nYou can put one in your config. See <b>man wly_colpick</b>"
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1"  height="256px" width="256px" viewBox="0 0 256 256">
+  <path d="m 128,128 -110,0 0,-110 110,0 z" style="fill:#73C696;stroke:none;"/>
+  <path d="m 128,128 0,-110 110,0 0,110  z" style="fill:#C67375;stroke:none;"/>
+  <path d="m 128,128 110,0 0,110 -110,0 z" style="fill:#E7E7B5;stroke:none;"/>
+  <path d="m 128,128 0,110 -110,0 0,-110 z" style="fill:#73A0C6;stroke:none;"/>
+  <g transform="rotate(45 128 128)">
+    <path d="m 118,100 -10,10 40,0 -10,-10 0,-40 a 10,10 0 0 0 -20,0 z" style="fill:#474747;stroke:none;"/>
+    <path d="m 120,110 0,90 5,3 6,0 5,-3 0,-90 z" style="stroke:#474747;stroke-width:3;fill:rgba(71,71,71,0.35);"/>
+  </g>
+</svg>
