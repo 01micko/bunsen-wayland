@@ -7,7 +7,7 @@
     {
       "name": "Shell",
       "exec": "/usr/bin/bash"
-      "name": "labwc",
+      "name": "Labwc",
       "exec": "/usr/bin/labwc"
     }
   ],
