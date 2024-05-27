@@ -57,6 +57,7 @@ sudo cp man/* /usr/share/man/man1 || exit 1
 
 # greetd configs
 sudo chown -R _greetd:_greetd etc/greetd/* || exit 1
+sudo chown -R _greetd:_greetd etc/gtkgreet/* || exit 1
 sudo cp -r etc/* /etc/ || exit 1
 
 # themes fixup hack, from defaults in skell

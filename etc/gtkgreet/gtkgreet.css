@@ -1,0 +1,11 @@
+window {
+        background-image: url("/usr/share/images/bunsen/wallpapers/default/Boron-Emerald-logo-1920x1080.jpg");
+        background-size: cover;
+        background-position: center;
+}
+
+box#body {
+        background-color: rgba(50, 50, 50, 0.5);
+        border-radius: 10px;
+        padding: 50px;
+}
